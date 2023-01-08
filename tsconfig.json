@@ -11,7 +11,9 @@
       "strict": true,
       "skipLibCheck": true,
       "paths": {
-        "@app*": ["./src/*"]
+        "@app*": ["./src/*"],
+
+        "@utils": ["./src/utils/_index.ts"],
       },
     },
     "include": ["./src/**/*"]

@@ -1,7 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import connect from './utils/mongoConnect';
-import logger from './utils/logger';
+import { connect, logger } from '@utils';
 
 dotenv.config()
 

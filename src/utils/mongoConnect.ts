@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import logger from './logger';
+import { logger } from '@utils';
 
-async function connect() {
+export async function connect() {
     const connectionString = process.env.MONGO_URL!;
 
     try {
@@ -14,5 +14,3 @@ async function connect() {
         process.exit(1);
     }
 }
-
-export default connect;
