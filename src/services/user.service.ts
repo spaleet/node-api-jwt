@@ -3,7 +3,7 @@ import { DocumentDefinition } from 'mongoose';
 
 const UserService = {
 
-    async createUser(input: DocumentDefinition<IUserDocument>) {
+    async createUser(input: DocumentDefinition<Omit<IUserDocument, "createdAt" | "updatedAt" | "comparePassword">>) {
         try {
             return await UserModel.create(input);
         } catch (error: any) {
