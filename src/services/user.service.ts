@@ -1,4 +1,4 @@
-import UserModel, { IUserDocument } from '@app/models/user.model';
+import { UserModel, IUserDocument } from '@models';
 import { DocumentDefinition } from 'mongoose';
 
 const UserService = {

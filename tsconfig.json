@@ -14,6 +14,10 @@
         "@app*": ["./src/*"],
 
         "@utils": ["./src/utils/_index.ts"],
+        "@models": ["./src/models/_index.ts"],
+        "@services": ["./src/services/_index.ts"],
+        "@controllers": ["./src/controllers/_index.ts"],
+        "@routes": ["./src/routes/_index.ts"],
       },
     },
     "include": ["./src/**/*"]

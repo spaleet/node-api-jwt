@@ -1,7 +1,7 @@
-import { createUserHandler } from '@app/controllers/user.controller';
-import express, { Request, Response } from 'express';
+import { createUserHandler } from '@controllers';
+import { Router, Request, Response } from 'express';
 
-const router = express.Router();
+const router = Router();
 
 router.post("/register", async (req: Request, res: Response) => createUserHandler);
 

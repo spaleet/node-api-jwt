@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { logger } from '@utils';
-import UserService from "@app/services/user.service";
+import { UserService } from "@services";
 
 export async function createUserHandler(req: Request, res: Response) {
     try {

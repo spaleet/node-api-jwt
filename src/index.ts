@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { connect, logger } from '@utils';
-import userRouter from '@app/routes/user.routes';
+import { userRouter } from '@routes';
 
 dotenv.config()
 
