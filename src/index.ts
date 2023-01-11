@@ -6,6 +6,7 @@ import { userRouter } from '@routes';
 dotenv.config()
 
 const app = express();
+app.use(express.json())
 
 connect();
 
