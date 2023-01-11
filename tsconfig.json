@@ -14,7 +14,10 @@
         "@app*": ["./src/*"],
 
         "@utils": ["./src/utils/_index.ts"],
+        "@middlewares": ["./src/middlewares/_index.ts"],
+
         "@models": ["./src/models/_index.ts"],
+        "@schemas": ["./src/schemas/_index.ts"],
         "@services": ["./src/services/_index.ts"],
         "@controllers": ["./src/controllers/_index.ts"],
         "@routes": ["./src/routes/_index.ts"],
