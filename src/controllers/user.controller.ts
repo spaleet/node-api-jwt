@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { omit } from "lodash";
 import { logger } from '@utils';
-import { UserService } from "@services";
+import { createUser } from "@services/user.service";
 import { CreateUserInput } from '@schemas';
 
 export async function createUserHandler(req: Request<{}, {}, CreateUserInput["body"]>, res: Response) {
 
     try {
-        const user = await UserService.createUser(req.body);
+        const user = await createUser(req.body);
 
         const jsonResult = omit(user.toJSON(), "password")
 

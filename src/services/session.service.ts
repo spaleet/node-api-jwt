@@ -1,12 +1,7 @@
 import { SessionModel } from '@models';
 
-const SessionService = {
+export async function createSession(userId: string, userAgent: string) {
+    const session = await SessionModel.create({ user: userId, userAgent });
 
-    async createSession(userId: string, userAgent: string) {
-        const session = await SessionModel.create({ user: userId, userAgent });
-
-        return session.toJSON();
-    }
+    return session.toJSON();
 }
-
-export default SessionService
