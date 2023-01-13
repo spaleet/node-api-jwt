@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { validatePassword } from "@services/user.service";
 import { createSession } from "@services/session.service";
-import { signToken } from '../utils/jwt.util';
+import { signToken } from '@utils';
+import { CreateSessionInput } from "@schemas";
 
-export async function createUserSessionHandler(req: Request, res: Response) {
+export async function createSessionHandler(req: Request<{}, {}, CreateSessionInput["body"]>, res: Response) {
 
     // validate user
     const user = await validatePassword(req.body)

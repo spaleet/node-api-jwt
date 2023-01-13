@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken'
 
-const publicKey: string = process.env.PUBLIC_KEY!
-const privateKey: string = process.env.PRIVATE_KEY!
+const publicKey: string = `${process.env.PUBLIC_KEY}`;
+const privateKey: string = `${process.env.PRIVATE_KEY}`;
 
 export function signToken(object: Object, options?: jwt.SignOptions | undefined): string {
+
     return jwt.sign(object, privateKey, {
         ...(options && options), // check if undefined
         algorithm: "RS256"
