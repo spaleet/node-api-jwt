@@ -1,2 +1,3 @@
 export { default as validateResource } from './validateResource';
-export { default as deserializeUser } from './deserializeUser';
+export { default as processUserData } from './processUserData';
+export { default as authorizeUser } from './authorizeUser';

@@ -2,13 +2,13 @@ import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { connect, logger } from '@utils';
 import { userRouter, sessionRouter } from '@routes';
-import { deserializeUser } from '@middlewares';
+import { processUserData } from '@middlewares';
 
 dotenv.config()
 
 const app = express();
 app.use(express.json())
-app.use(deserializeUser);
+app.use(processUserData);
 
 connect();
 
