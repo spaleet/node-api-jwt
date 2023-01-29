@@ -1,6 +1,6 @@
 import { createUserHandler } from '@controllers';
 import { Router, Request, Response } from 'express';
-import { validateResource } from '@middlewares';
+import { validateResource } from '@middleware';
 import { createUserSchema } from '@schemas';
 
 const router = Router();

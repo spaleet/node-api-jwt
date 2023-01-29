@@ -14,7 +14,7 @@
         "@app/*": ["./src/*"],
 
         "@utils": ["./src/utils/_index.ts"],
-        "@middlewares": ["./src/middlewares/_index.ts"],
+        "@middleware": ["src/middleware/_index.ts"],
 
         "@models": ["./src/models/_index.ts"],
         "@schemas": ["./src/schemas/_index.ts"],

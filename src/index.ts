@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { connect, logger } from '@utils';
 import { userRouter, sessionRouter } from '@routes';
-import { processUserData } from '@middlewares';
+import { processUserData } from '@middleware';
 
 dotenv.config()
 

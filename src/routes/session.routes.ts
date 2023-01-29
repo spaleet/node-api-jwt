@@ -1,4 +1,4 @@
-import { validateResource } from '@middlewares';
+import { validateResource } from '@middleware';
 import { createSessionHandler, getUserSessionsHandler } from '@controllers';
 import { Router } from 'express';
 import { createSessionSchema } from '@schemas';
