@@ -4,6 +4,10 @@ import { createSession } from "@services/session.service";
 import { signToken } from '@utils';
 import { CreateSessionInput } from "@schemas";
 
+export async function getUserSessionsHandler(req: Request, res: Response) {
+
+}
+
 export async function createSessionHandler(req: Request<{}, {}, CreateSessionInput["body"]>, res: Response) {
 
     // validate user
