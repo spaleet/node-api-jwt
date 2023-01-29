@@ -1,11 +1,16 @@
 import { Request, Response } from "express";
 import { validatePassword } from "@services/user.service";
-import { createSession } from "@services/session.service";
+import { createSession, findSessions } from "@services/session.service";
 import { signToken } from '@utils';
 import { CreateSessionInput } from "@schemas";
 
 export async function getUserSessionsHandler(req: Request, res: Response) {
 
+    const userId = res.locals.user._id;
+
+    const sessions = await findSessions({ user: userId, valid: true })
+
+    return res.send(sessions);
 }
 
 export async function createSessionHandler(req: Request<{}, {}, CreateSessionInput["body"]>, res: Response) {

@@ -7,6 +7,6 @@ const router = Router();
 
 router.post("/new", validateResource(createSessionSchema), createSessionHandler);
 
-router.get('', getUserSessionsHandler);
+router.get("", getUserSessionsHandler);
 
 export default router;

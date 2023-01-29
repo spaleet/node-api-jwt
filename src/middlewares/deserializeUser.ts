@@ -16,7 +16,10 @@ const deserializeUser = (req: Request, res: Response, next: NextFunction) => {
 
         // store data in request/response cycle
         res.locals.user = verifyResult.decoded;
+        return next();
     }
+
+    return next();
 }
 
 export default deserializeUser;
