@@ -4,7 +4,8 @@ import { connect, logger } from '@utils';
 import { userRouter, sessionRouter } from '@routes';
 import { processUserData } from '@middleware';
 
-dotenv.config()
+dotenv.config();
+dotenv.config({ path: `.env.local`, override: true });
 
 const app = express();
 app.use(express.json())
