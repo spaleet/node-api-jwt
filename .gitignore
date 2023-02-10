@@ -3,6 +3,5 @@ node_modules/
 package-lock.json
 *.log
 *.gz
-.vscode/
 *.env.local
 dist/

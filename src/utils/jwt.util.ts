@@ -23,11 +23,9 @@ export type VerifyJwtResponse = {
 }
 
 export function verifyToken(token: string): VerifyJwtResponse {
-    console.log("here");
 
     try {
         const decoded = jwt.verify(token, process.env.PUBLIC_KEY!);
-        console.log("here23");
 
         return {
             valid: true,
@@ -35,8 +33,6 @@ export function verifyToken(token: string): VerifyJwtResponse {
             decoded: decoded.toString()
         }
     } catch (error: any) {
-        console.log("here error", error);
-
         return {
             valid: false,
             expired: error.message === 'jwt expired',
