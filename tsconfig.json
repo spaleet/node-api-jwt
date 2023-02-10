@@ -20,7 +20,7 @@
         "@models": ["./src/models/_index.ts"],
         "@schemas": ["./src/schemas/_index.ts"],
         "@services/*": ["./src/services/*"],
-        "@controllers": ["./src/controllers/_index.ts"],
+        "@controllers/*": ["./src/controllers/*"],
         "@routes": ["./src/routes/_index.ts"],
       },
     },

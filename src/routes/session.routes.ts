@@ -1,5 +1,5 @@
 import { authorizeUser, validateResource } from '@middleware';
-import { createSessionHandler, getUserSessionsHandler, deleteSessionHandler } from '@controllers';
+import { createSessionHandler, getUserSessionsHandler, deleteSessionHandler } from '@controllers/session.controller';
 import { Router } from 'express';
 import { createSessionSchema } from '@schemas';
 
