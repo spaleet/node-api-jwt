@@ -6,7 +6,8 @@ import { CreateSessionInput } from "@schemas";
 
 export async function getUserSessionsHandler(req: Request, res: Response) {
 
-    const userId = res.locals.user._id;
+    const localUser = JSON.parse(res.locals.user)
+    const userId = localUser._id;
 
     const sessions = await findSessions({ user: userId, valid: true })
 

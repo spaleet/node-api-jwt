@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn tsconfig-paths/register src/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
     "build": "rimraf ./dist && tsc && tsc-alias",
     "start:dev": "npm run dev",
     "start": "npm run build && node dist/index.js"
