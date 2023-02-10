@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { validatePassword } from "@services/user.service";
-import { createSession, findSessions } from "@services/session.service";
+import { createSession, findSessions, updateSession } from "@services/session.service";
 import { createAccessToken, createRefreshToken } from '@utils';
 import { CreateSessionInput } from "@schemas";
 
@@ -33,4 +33,17 @@ export async function createSessionHandler(req: Request<{}, {}, CreateSessionInp
     const refreshToken = await createRefreshToken({ ...user, session: session._id });
 
     return res.send({ accessToken, refreshToken })
+}
+
+export async function deleteSessionHandler(req: Request, res: Response) {
+
+    const localUser = JSON.parse(res.locals.user)
+    const sessionId = localUser.session;
+
+    await updateSession(sessionId, { valid: false })
+
+    return res.send({
+        accessToken: null,
+        refreshToken: null,
+    })
 }
