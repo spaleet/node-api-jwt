@@ -1,6 +1,10 @@
 import { UserModel, IUserDocument } from '@models';
 import { omit } from 'lodash';
-import { DocumentDefinition } from 'mongoose';
+import { DocumentDefinition, FilterQuery } from 'mongoose';
+
+export async function findUser(query: FilterQuery<IUserDocument>) {
+    return UserModel.findOne(query).lean();
+}
 
 export async function createUser(input: DocumentDefinition<Omit<IUserDocument, "createdAt" | "updatedAt" | "comparePassword">>) {
     try {

@@ -1,8 +1,9 @@
 import { SessionModel } from '@models';
 import { FilterQuery, UpdateQuery } from 'mongoose';
-import { ISessionDocument } from '../models/session.model';
-import { verifyToken } from '@utils';
+import { ISessionDocument } from '@models';
+import { createAccessToken, verifyToken } from '@utils';
 import { get } from 'lodash'
+import { findUser } from '@services/user.service';
 
 export async function findSessions(query: FilterQuery<ISessionDocument>) {
 
@@ -22,19 +23,25 @@ export async function updateSession(sessionId: string, update: UpdateQuery<ISess
 
 }
 
-export async function reIssueAccessToken(refreshToken: string): Promise<string> {
+export async function reIssueAccessToken(refreshToken: string): Promise<string | null> {
 
     const { decoded } = verifyToken(refreshToken)
 
     if (!decoded || !get(decoded, "_id")) {
-        return "";
+        return null;
     }
 
     const session = await SessionModel.findById(get(decoded, "_id"));
 
     if (!session || !session.valid) {
-        return "";
+        return null;
     }
 
+    const user = await findUser({ _id: session.user });
 
+    if (!user) return null;
+
+    const accessToken = await createAccessToken({ ...user, session: session._id });
+
+    return accessToken;
 }
