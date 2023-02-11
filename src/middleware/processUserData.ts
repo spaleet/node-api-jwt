@@ -6,7 +6,7 @@ import { reIssueAccessToken } from '@services/session.service';
 const processUserData = async (req: Request, res: Response, next: NextFunction) => {
 
     const accessToken = get(req, "headers.authorization", "").replace(/^Bearer\s/, "");
-    const refreshToken = get(req, "headers.x-refresh", "")[0];
+    const refreshToken = get(req, "headers.x-refresh", "").toString();
 
     if (accessToken === "") {
         return next();

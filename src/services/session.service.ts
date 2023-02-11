@@ -25,13 +25,14 @@ export async function updateSession(sessionId: string, update: UpdateQuery<ISess
 
 export async function reIssueAccessToken(refreshToken: string): Promise<string | null> {
 
-    const { decoded } = verifyToken(refreshToken)
+    const verifyResult = verifyToken(refreshToken)
+    const tokenDecoded = JSON.parse(verifyResult.decoded!);
 
-    if (!decoded || !get(decoded, "_id")) {
+    if (!tokenDecoded || !get(tokenDecoded, "session")) {
         return null;
     }
 
-    const session = await SessionModel.findById(get(decoded, "_id"));
+    const session = await SessionModel.findById(get(tokenDecoded, "session"));
 
     if (!session || !session.valid) {
         return null;
