@@ -15,6 +15,14 @@ export interface IProductDocument extends mongoose.Document {
     updatedAt: Date;
 }
 
+export interface ProductInput {
+    user: IUserDocument["_id"];
+    title: string;
+    description: string;
+    price: number;
+    image: string;
+}
+
 const productSchema = new mongoose.Schema({
     productId: {
         type: String,
