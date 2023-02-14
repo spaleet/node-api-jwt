@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { logger } from '@utils';
-import { createProduct } from "@services/product.service";
-import { CreateProductInput } from '@schemas';
+import { logger, parseUserId } from '@utils';
+import { createProduct, findProduct, updateProduct } from "@services/product.service";
+import { CreateProductInput, UpdateProductInput } from '@schemas';
 
 export async function createProductHandler(req: Request<{}, {}, CreateProductInput["body"]>, res: Response) {
 
     try {
-        const userId = res.locals.user._id;
+        const userId = parseUserId(res);
 
         const body = req.body;
         const result = await createProduct({ ...body, user: userId });
@@ -17,4 +17,27 @@ export async function createProductHandler(req: Request<{}, {}, CreateProductInp
         logger.error(error);
         return res.status(409).send(error.message);
     }
+}
+
+export async function updateProductHandler(req: Request<UpdateProductInput["params"]>, res: Response) {
+    const userId = parseUserId(res);
+
+    const productId = req.params.productId;
+    const update = req.body;
+
+    const product = await findProduct({ productId });
+
+    if (!product) {
+        return res.sendStatus(404);
+    }
+
+    if (String(product.user) !== userId) {
+        return res.sendStatus(403);
+    }
+
+    const updatedProduct = await updateProduct({ productId }, update, {
+        new: true,
+    });
+
+    return res.send(updatedProduct);
 }

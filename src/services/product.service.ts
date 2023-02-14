@@ -15,7 +15,7 @@ export async function createProduct(input: DocumentDefinition<Omit<IProductDocum
     return result.toJSON();
 }
 
-export async function findAndUpdateProduct(
+export async function updateProduct(
     query: FilterQuery<IProductDocument>,
     update: UpdateQuery<IProductDocument>,
     options: QueryOptions
