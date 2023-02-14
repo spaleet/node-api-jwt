@@ -1,5 +1,5 @@
-import { IProductDocument, ProductModel, ProductInput } from '@models';
-import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
+import { IProductDocument, ProductModel } from '@models';
+import { DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 
 export async function findProduct(
     query: FilterQuery<IProductDocument>,
@@ -8,7 +8,7 @@ export async function findProduct(
     return await ProductModel.findOne(query, {}, options);
 }
 
-export async function createProduct(input: ProductInput) {
+export async function createProduct(input: DocumentDefinition<Omit<IProductDocument, "createdAt" | "updatedAt">>) {
 
     const result = await ProductModel.create(input);
 
@@ -23,6 +23,6 @@ export async function findAndUpdateProduct(
     return ProductModel.findOneAndUpdate(query, update, options);
 }
 
-export async function deleteProduct(query: FilterQuery<ProductDocument>) {
+export async function deleteProduct(query: FilterQuery<IProductDocument>) {
     return ProductModel.deleteOne(query);
 }
