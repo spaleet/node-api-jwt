@@ -1,5 +1,7 @@
 import { IProductDocument, ProductModel } from '@models';
 import { DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
+import { logger } from '@utils';
+import { omit } from 'lodash';
 
 export async function findProduct(
     query: FilterQuery<IProductDocument>,
@@ -10,17 +12,27 @@ export async function findProduct(
 
 export async function createProduct(input: DocumentDefinition<Omit<IProductDocument, "createdAt" | "updatedAt">>) {
 
-    const result = await ProductModel.create(input);
+    try {
+        const result = await ProductModel.create(input);
 
-    return result.toJSON();
+        return omit(result.toJSON(), "createdAt", "updatedAt", "__v", "user");
+    } catch (error) {
+        logger.error(error);
+    }
 }
 
 export async function updateProduct(
     query: FilterQuery<IProductDocument>,
-    update: UpdateQuery<IProductDocument>,
-    options: QueryOptions
+    update: UpdateQuery<IProductDocument>
 ) {
-    return ProductModel.findOneAndUpdate(query, update, options);
+    try {
+
+        const updatedResult = ProductModel.findOneAndUpdate(query, update, { new: true });
+
+        return updatedResult;
+    } catch (error) {
+        logger.error(error);
+    }
 }
 
 export async function deleteProduct(query: FilterQuery<IProductDocument>) {

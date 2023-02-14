@@ -35,9 +35,7 @@ export async function updateProductHandler(req: Request<UpdateProductInput["para
         return res.sendStatus(403);
     }
 
-    const updatedProduct = await updateProduct({ productId }, update, {
-        new: true,
-    });
+    const updatedProduct = await updateProduct({ productId }, update);
 
     return res.send(updatedProduct);
 }
