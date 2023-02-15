@@ -1,7 +1,6 @@
 import { IProductDocument, ProductModel } from '@models';
 import { DocumentDefinition, FilterQuery, UpdateQuery } from 'mongoose';
 import { logger } from '@utils';
-import { omit } from 'lodash';
 
 export async function findProductById(productId: string) {
     return await ProductModel.findOne({ productId });
@@ -10,28 +9,24 @@ export async function findProductById(productId: string) {
 export async function createProduct(input: DocumentDefinition<Omit<IProductDocument, "createdAt" | "updatedAt" | "cleanResult">>) {
 
     try {
-        const result = await ProductModel.create(input);
-
-        return result;
+        return await ProductModel.create(input)
     } catch (error) {
         logger.error(error);
     }
 }
 
-export async function updateProduct(
-    query: FilterQuery<IProductDocument>,
-    update: UpdateQuery<IProductDocument>
-) {
+export async function updateProduct(query: FilterQuery<IProductDocument>, update: UpdateQuery<IProductDocument>) {
     try {
-
-        const updatedResult = ProductModel.findOneAndUpdate(query, update, { new: true });
-
-        return updatedResult;
+        return await ProductModel.findOneAndUpdate(query, update, { new: true });
     } catch (error) {
         logger.error(error);
     }
 }
 
 export async function deleteProduct(query: FilterQuery<IProductDocument>) {
-    return ProductModel.deleteOne(query);
+    try {
+        return await ProductModel.deleteOne(query);
+    } catch (error) {
+        logger.error(error);
+    }
 }
