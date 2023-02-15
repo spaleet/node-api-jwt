@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { logger, parseUserId } from '@utils';
 import { createProduct, deleteProduct, findProduct, updateProduct } from "@services/product.service";
 import { GetProductInput, CreateProductInput, UpdateProductInput, DeleteProductInput } from '@schemas';
+import { omit } from "lodash";
 
 export async function getProductHandler(req: Request<GetProductInput["params"]>, res: Response) {
     const productId = req.params.productId;
@@ -11,7 +12,9 @@ export async function getProductHandler(req: Request<GetProductInput["params"]>,
         return res.sendStatus(404);
     }
 
-    return res.send(product);
+    const result = omit(product, "createdAt", "updatedAt", "__v", "user");
+
+    return res.send(result);
 }
 
 export async function createProductHandler(req: Request<{}, {}, CreateProductInput["body"]>, res: Response) {
@@ -47,8 +50,9 @@ export async function updateProductHandler(req: Request<UpdateProductInput["para
     }
 
     const updatedProduct = await updateProduct({ productId }, update);
+    const result = omit(updatedProduct, "createdAt", "updatedAt", "__v", "user");
 
-    return res.send(updatedProduct);
+    return res.send(result);
 }
 
 export async function deleteProductHandler(req: Request<DeleteProductInput["params"]>, res: Response) {
