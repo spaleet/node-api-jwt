@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { logger, parseUserId } from '@utils';
-import { createProduct, findProduct, updateProduct } from "@services/product.service";
-import { CreateProductInput, UpdateProductInput } from '@schemas';
+import { createProduct, deleteProduct, findProduct, updateProduct } from "@services/product.service";
+import { CreateProductInput, UpdateProductInput, DeleteProductInput } from '@schemas';
 
 export async function createProductHandler(req: Request<{}, {}, CreateProductInput["body"]>, res: Response) {
 
@@ -38,4 +38,23 @@ export async function updateProductHandler(req: Request<UpdateProductInput["para
     const updatedProduct = await updateProduct({ productId }, update);
 
     return res.send(updatedProduct);
+}
+
+export async function deleteProductHandler(req: Request<DeleteProductInput["params"]>, res: Response) {
+    const userId = parseUserId(res);
+    const productId = req.params.productId;
+
+    const product = await findProduct({ productId });
+
+    if (!product) {
+        return res.sendStatus(404);
+    }
+
+    if (String(product.user) !== userId) {
+        return res.sendStatus(403);
+    }
+
+    await deleteProduct({ productId });
+
+    return res.sendStatus(200);
 }
