@@ -10,12 +10,12 @@ export async function findProduct(
     return await ProductModel.findOne(query, {}, options);
 }
 
-export async function createProduct(input: DocumentDefinition<Omit<IProductDocument, "createdAt" | "updatedAt">>) {
+export async function createProduct(input: DocumentDefinition<Omit<IProductDocument, "createdAt" | "updatedAt" | "cleanResult">>) {
 
     try {
         const result = await ProductModel.create(input);
 
-        return omit(result.toJSON(), "createdAt", "updatedAt", "__v", "user");
+        return result;
     } catch (error) {
         logger.error(error);
     }

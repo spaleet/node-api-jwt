@@ -6,15 +6,14 @@ import { omit } from "lodash";
 
 export async function getProductHandler(req: Request<GetProductInput["params"]>, res: Response) {
     const productId = req.params.productId;
+
     const product = await findProduct({ productId });
 
     if (!product) {
         return res.sendStatus(404);
     }
 
-    const result = omit(product, "createdAt", "updatedAt", "__v", "user");
-
-    return res.send(result);
+    return res.send(product.cleanResult());
 }
 
 export async function createProductHandler(req: Request<{}, {}, CreateProductInput["body"]>, res: Response) {
@@ -25,7 +24,7 @@ export async function createProductHandler(req: Request<{}, {}, CreateProductInp
         const body = req.body;
         const result = await createProduct({ ...body, user: userId });
 
-        return res.status(200).send(result);
+        return res.status(200).send(result?.cleanResult());
 
     } catch (error: any) {
         logger.error(error);
