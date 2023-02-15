@@ -1,13 +1,10 @@
 import { IProductDocument, ProductModel } from '@models';
-import { DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
+import { DocumentDefinition, FilterQuery, UpdateQuery } from 'mongoose';
 import { logger } from '@utils';
 import { omit } from 'lodash';
 
-export async function findProduct(
-    query: FilterQuery<IProductDocument>,
-    options: QueryOptions = { lean: true }
-) {
-    return await ProductModel.findOne(query, {}, options);
+export async function findProductById(productId: string) {
+    return await ProductModel.findOne({ productId });
 }
 
 export async function createProduct(input: DocumentDefinition<Omit<IProductDocument, "createdAt" | "updatedAt" | "cleanResult">>) {

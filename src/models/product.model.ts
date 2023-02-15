@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { IUserDocument } from '@models';
 import { customAlphabet } from 'nanoid';
-import { omit } from "lodash";
 
 // generate custom ids
 const nanoid = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789", 10);
@@ -14,7 +13,6 @@ export interface IProductDocument extends mongoose.Document {
     image: string;
     createdAt: Date;
     updatedAt: Date;
-    cleanResult(): object
 }
 
 const productSchema = new mongoose.Schema({
@@ -32,12 +30,6 @@ const productSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
-
-productSchema.methods.cleanResult = function (): object {
-    const product = this as IProductDocument;
-
-    return omit(product.toJSON(), "createdAt", "updatedAt", "__v", "user")
-}
 
 const ProductModel = mongoose.model<IProductDocument>("Product", productSchema);
 

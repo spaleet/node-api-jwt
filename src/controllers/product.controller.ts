@@ -4,6 +4,10 @@ import { createProduct, deleteProduct, findProductById, updateProduct } from "@s
 import { GetProductInput, CreateProductInput, UpdateProductInput, DeleteProductInput } from '@schemas';
 import { omit } from "lodash";
 
+const cleanProductResult = (product: any) => {
+    return omit(product.toJSON(), "createdAt", "updatedAt", "__v", "user")
+}
+
 export async function getProductHandler(req: Request<GetProductInput["params"]>, res: Response) {
     const productId = req.params.productId;
 
@@ -13,7 +17,7 @@ export async function getProductHandler(req: Request<GetProductInput["params"]>,
         return res.sendStatus(404);
     }
 
-    return res.send(product.cleanResult());
+    return res.send(cleanProductResult(product));
 }
 
 export async function createProductHandler(req: Request<{}, {}, CreateProductInput["body"]>, res: Response) {
@@ -24,7 +28,8 @@ export async function createProductHandler(req: Request<{}, {}, CreateProductInp
         const body = req.body;
         const result = await createProduct({ ...body, user: userId });
 
-        return res.status(200).send(result?.cleanResult());
+        return res.status(200)
+            .send(cleanProductResult(result));
 
     } catch (error: any) {
         logger.error(error);
@@ -49,9 +54,8 @@ export async function updateProductHandler(req: Request<UpdateProductInput["para
     }
 
     const updatedProduct = await updateProduct({ productId }, update);
-    const result = omit(updatedProduct, "createdAt", "updatedAt", "__v", "user");
 
-    return res.send(result);
+    return res.send(cleanProductResult(updatedProduct));
 }
 
 export async function deleteProductHandler(req: Request<DeleteProductInput["params"]>, res: Response) {
