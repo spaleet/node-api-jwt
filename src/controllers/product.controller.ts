@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { logger, parseUserId } from '@utils';
-import { createProduct, deleteProduct, findProduct, updateProduct } from "@services/product.service";
+import { createProduct, deleteProduct, findProductById, updateProduct } from "@services/product.service";
 import { GetProductInput, CreateProductInput, UpdateProductInput, DeleteProductInput } from '@schemas';
 import { omit } from "lodash";
 
 export async function getProductHandler(req: Request<GetProductInput["params"]>, res: Response) {
     const productId = req.params.productId;
 
-    const product = await findProduct({ productId });
+    const product = await findProductById(productId);
 
     if (!product) {
         return res.sendStatus(404);
@@ -38,7 +38,7 @@ export async function updateProductHandler(req: Request<UpdateProductInput["para
     const productId = req.params.productId;
     const update = req.body;
 
-    const product = await findProduct({ productId });
+    const product = await findProductById(productId);
 
     if (!product) {
         return res.sendStatus(404);
@@ -58,7 +58,7 @@ export async function deleteProductHandler(req: Request<DeleteProductInput["para
     const userId = parseUserId(res);
     const productId = req.params.productId;
 
-    const product = await findProduct({ productId });
+    const product = await findProductById(productId);
 
     if (!product) {
         return res.sendStatus(404);
