@@ -1,7 +1,18 @@
 import { Request, Response } from "express";
 import { logger, parseUserId } from '@utils';
 import { createProduct, deleteProduct, findProduct, updateProduct } from "@services/product.service";
-import { CreateProductInput, UpdateProductInput, DeleteProductInput } from '@schemas';
+import { GetProductInput, CreateProductInput, UpdateProductInput, DeleteProductInput } from '@schemas';
+
+export async function getProductHandler(req: Request<GetProductInput["params"]>, res: Response) {
+    const productId = req.params.productId;
+    const product = await findProduct({ productId });
+
+    if (!product) {
+        return res.sendStatus(404);
+    }
+
+    return res.send(product);
+}
 
 export async function createProductHandler(req: Request<{}, {}, CreateProductInput["body"]>, res: Response) {
 

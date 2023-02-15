@@ -44,5 +44,5 @@ export const getProductSchema = object({
 
 export type CreateProductInput = TypeOf<typeof createProductSchema>;
 export type UpdateProductInput = TypeOf<typeof updateProductSchema>;
-export type ReadProductInput = TypeOf<typeof getProductSchema>;
+export type GetProductInput = TypeOf<typeof getProductSchema>;
 export type DeleteProductInput = TypeOf<typeof deleteProductSchema>;
