@@ -47,3 +47,11 @@ userSchema.methods.comparePassword = async function (candidatePassword: string):
 const UserModel = mongoose.model<IUserDocument>("User", userSchema);
 
 export default UserModel;
+
+
+export interface UpdateUserInputModel {
+    email: string
+    username: string
+    oldPassword: string
+    newPassword: string
+}

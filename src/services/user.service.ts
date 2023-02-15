@@ -1,6 +1,7 @@
-import { UserModel, IUserDocument } from '@models';
+import { logger } from '@utils';
+import { UserModel, IUserDocument, UpdateUserInputModel } from '@models';
 import { omit } from 'lodash';
-import { DocumentDefinition, FilterQuery } from 'mongoose';
+import { DocumentDefinition, FilterQuery, UpdateQuery } from 'mongoose';
 
 export async function findUser(query: FilterQuery<IUserDocument>) {
     return UserModel.findOne(query).lean();
@@ -13,7 +14,26 @@ export async function createUser(input: DocumentDefinition<Omit<IUserDocument, "
         return omit(user.toJSON(), "password")
 
     } catch (error: any) {
-        throw new Error(error)
+        logger.error(error);
+    }
+}
+
+export async function updateUser(userId: string, updateData: UpdateUserInputModel) {
+    try {
+        const user = await UserModel.findOne({ _id: userId })
+        const isValid = await user?.comparePassword(updateData.oldPassword);
+
+        if (!isValid) throw new Error("Invalid Password");
+
+        return await UserModel.findOneAndUpdate({ userId },
+            {
+                password: updateData.newPassword,
+                email: updateData.email,
+                username: updateData.username,
+            }, { new: true });
+
+    } catch (error: any) {
+        logger.error(error);
     }
 }
 
