@@ -1,6 +1,7 @@
 import { object, string, TypeOf } from 'zod';
 
-export const createUserSchema = object({
+// sign up
+export const signUpSchema = object({
     body: object({
 
         email: string({
@@ -27,8 +28,28 @@ export const createUserSchema = object({
     })
 })
 
-export type CreateUserInput = Omit<TypeOf<typeof createUserSchema>, "body.confirmPassword">
+export type SignUpInput = Omit<TypeOf<typeof signUpSchema>, "body.confirmPassword">
 
+
+// sign in
+export const signInSchema = object({
+    body: object({
+
+        email: string({
+            required_error: "Email is required!"
+        }).email("Email is invalid!"),
+
+        password: string({
+            required_error: "Password is required!"
+        }).min(6, "Password should be between 6 to 25 chars!")
+            .max(25, "Password should be between 6 to 25 chars!"),
+
+    })
+})
+
+export type SignInInput = TypeOf<typeof signInSchema>
+
+// update user
 export const updateUserSchema = object({
     body: object({
 
