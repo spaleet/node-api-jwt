@@ -12,8 +12,8 @@ const app = express();
 app.use(express.json())
 app.use(processUserData);
 
+// db connection
 connect();
-
 
 app.get('/healthcheck', (req: Request, res: Response) => res.sendStatus(200));
 app.use('/api/users', userRouter);
