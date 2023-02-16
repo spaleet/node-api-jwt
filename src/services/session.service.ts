@@ -1,7 +1,7 @@
 import { SessionModel } from '@models';
 import { FilterQuery, UpdateQuery } from 'mongoose';
 import { ISessionDocument } from '@models';
-import { createAccessToken, verifyToken } from '@utils';
+import { ApiError, createAccessToken, verifyToken } from '@utils';
 import { get } from 'lodash'
 import { findUser } from '@services/user.service';
 
@@ -12,15 +12,21 @@ export async function findSessions(query: FilterQuery<ISessionDocument>) {
 }
 
 export async function createSession(userId: string, userAgent: string) {
-    const session = await SessionModel.create({ user: userId, userAgent });
+    try {
+        const session = await SessionModel.create({ user: userId, userAgent });
 
-    return session.toJSON();
+        return session.toJSON();
+    } catch (error: any) {
+        throw new ApiError(400, error.toString());
+    }
 }
 
 export async function updateSession(sessionId: string, update: UpdateQuery<ISessionDocument>) {
-
-    return SessionModel.updateOne({ _id: sessionId }, update);
-
+    try {
+        return SessionModel.updateOne({ _id: sessionId }, update);
+    } catch (error: any) {
+        throw new ApiError(400, error.toString());
+    }
 }
 
 export async function reIssueAccessToken(refreshToken: string): Promise<string | null> {
@@ -29,20 +35,22 @@ export async function reIssueAccessToken(refreshToken: string): Promise<string |
     const tokenDecoded = JSON.parse(verifyResult.decoded!);
 
     if (!tokenDecoded || !get(tokenDecoded, "session")) {
-        return null;
+        throw new ApiError(400, "Invalid credentials!");
     }
 
     const session = await SessionModel.findById(get(tokenDecoded, "session"));
 
     if (!session || !session.valid) {
-        return null;
+        throw new ApiError(400, "Invalid credentials!");
     }
 
     const user = await findUser({ _id: session.user });
 
-    if (!user) return null;
+    if (!user) {
+        throw new ApiError(400, "Invalid credentials!");
+    }
 
-    const accessToken = await createAccessToken({ ...user, session: session._id });
+    const accessToken = createAccessToken({ ...user, session: session._id });
 
     return accessToken;
 }

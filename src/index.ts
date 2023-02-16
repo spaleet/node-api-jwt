@@ -24,10 +24,7 @@ app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
 
     logger.error(`ERROR: ${err.message}`);
 
-    res.status(err.status)
-        .json({
-            message: err.message
-        });
+    res.status(err.status).send(`ERROR: ${err.message}`);
 });
 
 

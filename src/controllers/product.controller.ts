@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { logger, parseUserId } from '@utils';
 import { createProduct, deleteProduct, findProductById, updateProduct } from "@services/product.service";
 import { GetProductInput, CreateProductInput, UpdateProductInput, DeleteProductInput } from '@schemas';
@@ -9,6 +9,7 @@ const cleanProductResult = (product: any) => {
 }
 
 export async function getProductHandler(req: Request<GetProductInput["params"]>, res: Response) {
+
     const productId = req.params.productId;
 
     const product = await findProductById(productId);
@@ -20,7 +21,7 @@ export async function getProductHandler(req: Request<GetProductInput["params"]>,
     return res.send(cleanProductResult(product));
 }
 
-export async function createProductHandler(req: Request<{}, {}, CreateProductInput["body"]>, res: Response) {
+export async function createProductHandler(req: Request<{}, {}, CreateProductInput["body"]>, res: Response, next: NextFunction) {
 
     try {
         const userId = parseUserId(res);
@@ -31,48 +32,59 @@ export async function createProductHandler(req: Request<{}, {}, CreateProductInp
         return res.status(200)
             .send(cleanProductResult(result));
 
-    } catch (error: any) {
-        logger.error(error);
-        return res.status(409).send(error.message);
+    } catch (error) {
+        return next(error);
     }
 }
 
-export async function updateProductHandler(req: Request<UpdateProductInput["params"]>, res: Response) {
-    const userId = parseUserId(res);
+export async function updateProductHandler(req: Request<UpdateProductInput["params"]>, res: Response, next: NextFunction) {
 
-    const productId = req.params.productId;
-    const update = req.body;
+    try {
+        const userId = parseUserId(res);
 
-    const product = await findProductById(productId);
+        const productId = req.params.productId;
+        const update = req.body;
 
-    if (!product) {
-        return res.sendStatus(404);
+        const product = await findProductById(productId);
+
+        if (!product) {
+            return res.sendStatus(404);
+        }
+
+        if (String(product.user) !== userId) {
+            return res.sendStatus(403);
+        }
+
+        const updatedProduct = await updateProduct({ productId }, update);
+
+        return res.send(cleanProductResult(updatedProduct));
+    } catch (error) {
+        return next(error);
     }
 
-    if (String(product.user) !== userId) {
-        return res.sendStatus(403);
-    }
-
-    const updatedProduct = await updateProduct({ productId }, update);
-
-    return res.send(cleanProductResult(updatedProduct));
 }
 
-export async function deleteProductHandler(req: Request<DeleteProductInput["params"]>, res: Response) {
-    const userId = parseUserId(res);
-    const productId = req.params.productId;
+export async function deleteProductHandler(req: Request<DeleteProductInput["params"]>, res: Response, next: NextFunction) {
 
-    const product = await findProductById(productId);
+    try {
+        const userId = parseUserId(res);
+        const productId = req.params.productId;
 
-    if (!product) {
-        return res.sendStatus(404);
+        const product = await findProductById(productId);
+
+        if (!product) {
+            return res.sendStatus(404);
+        }
+
+        if (String(product.user) !== userId) {
+            return res.sendStatus(403);
+        }
+
+        await deleteProduct({ productId });
+
+        return res.sendStatus(200);
+    } catch (error) {
+        return next(error);
     }
 
-    if (String(product.user) !== userId) {
-        return res.sendStatus(403);
-    }
-
-    await deleteProduct({ productId });
-
-    return res.sendStatus(200);
 }
