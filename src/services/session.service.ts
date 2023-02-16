@@ -11,6 +11,8 @@ export async function findSessions(query: FilterQuery<ISessionDocument>) {
         .lean(); // remove other methods on the object
 }
 
+// TODO: delete expired sessions
+
 export async function createSession(userId: string, userAgent: string) {
     try {
         const session = await SessionModel.create({ user: userId, userAgent });
